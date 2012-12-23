@@ -81,7 +81,7 @@ $(function()
             views = {
                 newsList: new View('news-list'),
                 newsItem: new View('news-item'),
-                loader: new Video('loader')
+                loader: new View('loader')
             }
 
             return dfd;

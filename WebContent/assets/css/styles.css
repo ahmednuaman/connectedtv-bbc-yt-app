@@ -1,11 +1,86 @@
 html,
 body {
-    overflow: hidden;
     background: #ffffff;
+}
 
-    /* since this is for smart TVs we can use a fixed size, woop woop */
-    width: 1280px;
+#container {
+    display: block;
+    position: relative;
+    width: 1024px;
     height: 720px;
+}
+
+#header {
+    display: block;
+    position: fixed;
+    background: #990000;
+    top: 0;
+    left: 0;
+    width: 100%;
+    border-top: 20px solid #7A0000;
+}
+
+#header h1 {
+    margin: 10px;
+    color: #ffffff;
+    font-weight: lighter;
+}
+
+#news-list,
+#news-item {
+    display: block;
+    position: relative;
+    margin: 90px 0 10px;
+}
+
+#news-list .news-list-item {
+    display: block;
+    float: left;
+    width: 328px;
+    height: 81px;
+    padding: 0 0 10px 0;
+    margin: 0 10px 10px 0;
+    border-bottom: 1px solid #990000;
+    text-decoration: none;
+    color: #505050;
+}
+
+#news-list .news-list-item img,
+#news-list .news-list-item span {
+    display: block;
+    float: left;
+}
+
+#news-list .news-list-item span {
+    width: 174px;
+}
+
+#news-list .news-list-item img {
+    margin-right: 10px;
+    height: 81px;
+    width: 144px;
+}
+
+#news-list .news-list-item h3,
+#news-list .news-list-item p {
+    margin-top: 0;
+}
+
+#news-list .news-list-item p {
+    font-size: .75em;
+    display: none;
+}
+
+#news-list .news-list-item:hover {
+    background: #dddddd;
+}
+
+#news-list .news-list-item:hover h3 {
+    display: none;
+}
+
+#news-list .news-list-item:hover p {
+    display: block;
 }
 
 #loader {

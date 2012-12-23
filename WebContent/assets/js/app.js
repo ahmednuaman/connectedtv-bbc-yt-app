@@ -9,12 +9,53 @@ $(function()
     // begin defining our 'classes', let's start with our models
     var NewsItemModel = function(data)
     {
-        return data;
+        this.id = data.title.toLowerCase().replace(/[\W|\s]+/gim, '_');
+
+        this.date = new Date(data.pubDate);
+        this.description = data.description;
+        this.link = data.link;
+        this.title = data.title;
+        this.thumb = data.thumbnail[1].url;
     }
 
     var NewsItemsCollection = function()
     {
-        return [ ];
+        var collection = [ ];
+        var idToIndex = { };
+        var that = this;
+
+        this.push = collection.push;
+
+        this.at = function(index)
+        {
+            return collection[index];
+        }
+
+        this.get = function(id)
+        {
+            try
+            {
+                // is this result cached?
+                return collection[idToIndex[id]];
+            }
+            catch (e)
+            {
+                var item;
+
+                for (var i = collection.length - 1; i >= 0; i--)
+                {
+                    item = collection[i];
+
+                    if (item.id === id)
+                    {
+                        // cache the result
+                        idToIndex[id] = i;
+
+                        return item;
+                    }
+                }
+            }
+        }
     }
 
     // our base view class
@@ -22,17 +63,17 @@ $(function()
     {
         var that = this;
 
-        that.id = '#' + id;
-        that.el = $(that.id);
+        this.id = '#' + id;
+        this.el = $(this.id);
 
         // check if there's a handlebars template in this view
-        if (that.el.first().is('script') && that.el.first().attr('type') === 'text/x-handlebars-template')
+        if (arguments[1] !== false)
         {
-            that.template = Handlebars.compile(
-                that.el.html()
+            this.template = Handlebars.compile(
+                this.el.find('script').html()
             );
 
-            that.render = function(data)
+            this.render = function(data)
             {
                 that.el.html(
                     that.template(data)
@@ -40,6 +81,12 @@ $(function()
             }
         }
     }
+
+    // handlebars helpers
+    // Handlebars.registerHelper('blah', function()
+    // {
+    //
+    // });
 
     // now our app controller
     $(function()
@@ -73,7 +120,8 @@ $(function()
             dfd.resolve();
 
             return dfd;
-        }).then(function()
+        })
+        .then(function()
         {
             var dfd = new $.Deferred;
 
@@ -81,10 +129,22 @@ $(function()
             views = {
                 newsList: new View('news-list'),
                 newsItem: new View('news-item'),
-                loader: new View('loader')
+                loader: new View('loader', false)
             }
 
+            dfd.resolve();
+
             return dfd;
+        })
+        .done(function()
+        {
+            // finally populate our news list
+            views.newsList.render({
+                items: newsItemsCollection
+            });
+
+            // and hide our loader
+            views.loader.el.hide();
         });
     });
 });

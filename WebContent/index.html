@@ -4,22 +4,24 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <link rel="stylesheet" type="text/css" href="assets/css/normalize.css" />
     <link rel="stylesheet" type="text/css" href="assets/css/styles.css" />
-    <title>BBC News</title>
+    <title>BBC YouTube</title>
 </head>
 <body>
     <div id="container">
         <div id="news-list">
             <script id="news-list-template" type="text/x-handlebars-template">
                 {{#each items}}
-                    <a href="#{{this.id}}" id="{{this.id}}" class="news-list-item">
-                        <img src="{{this.thumb}}" alt="{{this.title}}" />
-                        <span>
-                            <h3>{{this.title}}</h3>
-                            <p>
-                                {{this.description}}
-                            </p>
-                        </span>
-                    </a>
+                    <div id="{{this.id}}" class="news-list-item">
+                        <a href="#{{this.id}}">
+                            <img src="{{this.thumb}}" alt="{{this.title}}" />
+                            <span>
+                                <h3>{{this.title}}</h3>
+                                <p>
+                                    {{this.description}}
+                                </p>
+                            </span>
+                        </a>
+                    </div>
                 {{/each}}
             </script>
         </div>
@@ -29,7 +31,7 @@
             </script>
         </div>
         <div id="header">
-            <h1>BBC News Feed</h1>
+            <h1>BBC YouTube Feed</h1>
         </div>
         <div id="loader"></div>
     </div>

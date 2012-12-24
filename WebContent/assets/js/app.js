@@ -2,20 +2,19 @@
 $(function()
 {
     // let's set some constants
-    var FEED_NEWS = encodeURIComponent('http://feeds.bbci.co.uk/news/rss.xml');
     var FEED_NUM = 20;
-    var FEED_URL = 'http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20xml%20where%20url%3D%22' + FEED_NEWS + '%22&format=json&callback=?';
+    var FEED_URL = 'https://gdata.youtube.com/feeds/api/users/bbc/uploads?alt=json&fields=entry(id,published,link,title,content,media:group(media:content,media:thumbnail))&max-results=' + FEED_NUM + '&callback=?';
 
     // begin defining our 'classes', let's start with our models
     var NewsItemModel = function(data)
     {
-        this.id = data.title.toLowerCase().replace(/[\W|\s]+/gim, '_');
+        this.id = YT.getYTVideoId(data.id.$t);
 
-        this.date = new Date(data.pubDate);
-        this.description = data.description;
-        this.link = data.link;
-        this.title = data.title;
-        this.thumb = data.thumbnail[1].url;
+        this.date = new Date(data.published.$t);
+        this.description = data.content.$t;
+        this.link = data.link[0].href;
+        this.title = data.title.$t;
+        this.thumb = data.media$group.media$thumbnail[0].url;
     }
 
     var NewsItemsCollection = function()
@@ -88,6 +87,16 @@ $(function()
     //
     // });
 
+    // some private functions
+    var YT = {
+        getYTVideoId: function(url)
+        {
+            url = url.split('/');
+
+            return url[url.length - 1];
+        }
+    };
+
     // now our app controller
     $(function()
     {
@@ -100,7 +109,8 @@ $(function()
         .then(function(data)
         {
             var dfd = new $.Deferred;
-            var length = data.query.results.rss.channel.item.length;
+            var entries = data.feed.entry;
+            var length = entries.length;
 
             if (length > FEED_NUM)
             {
@@ -113,7 +123,7 @@ $(function()
             for (var i = 0; i < length; i++)
             {
                 newsItemsCollection.push(
-                    new NewsItemModel(data.query.results.rss.channel.item[i])
+                    new NewsItemModel(entries[i])
                 );
             }
 

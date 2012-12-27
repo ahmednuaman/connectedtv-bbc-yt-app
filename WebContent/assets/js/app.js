@@ -4,11 +4,25 @@ $(function()
     // let's set some constants
     var FEED_NUM = 20;
     var FEED_URL = 'https://gdata.youtube.com/feeds/api/users/bbc/uploads?alt=json&fields=entry(id,published,link,title,content,media:group(media:content,media:thumbnail))&max-results=' + FEED_NUM + '&callback=?';
+    var YT_HELPER = {
+        getYTVideoId: function(url)
+        {
+            url = url.split('/');
+
+            return url[url.length - 1];
+        },
+
+        debug: function()
+        {
+            console.log(arguments);
+        }
+    };
+    var YT_PLAYER;
 
     // begin defining our 'classes', let's start with our models
     var NewsItemModel = function(data)
     {
-        this.id = YT.getYTVideoId(data.id.$t);
+        this.id = YT_HELPER.getYTVideoId(data.id.$t);
 
         this.date = new Date(data.published.$t);
         this.description = data.content.$t;
@@ -87,16 +101,6 @@ $(function()
     //
     // });
 
-    // some private functions
-    var YT = {
-        getYTVideoId: function(url)
-        {
-            url = url.split('/');
-
-            return url[url.length - 1];
-        }
-    };
-
     // now our app controller
     $(function()
     {
@@ -146,15 +150,62 @@ $(function()
 
             return dfd;
         })
-        .done(function()
+        .then(function()
         {
             // finally populate our news list
             views.newsList.render({
                 items: newsItemsCollection
             });
 
-            // and hide our loader
+            // and hide our loader and news item
             views.loader.el.hide();
+            views.newsItem.el.hide();
+        }).done(function()
+        {
+            // set up hash listener
+            window.onhashchange = function()
+            {
+                var id = window.location.hash.replace('#', '');
+
+                if (!id)
+                {
+                    return;
+                }
+
+                console.log(newsItemsCollection);
+
+                // render the news item
+                views.newsItem.render(
+                    newsItemsCollection.get(id)
+                );
+
+                // check if the yt player is defined or not
+                try
+                {
+                    YT_PLAYER.loadVideoById(id, 0, 'large');
+                }
+                catch (e)
+                {
+                    YT_PLAYER = new YT.Player('news-item-player', {
+                        height: '390',
+                        width: '640',
+                        videoId: id,
+                        events: {
+                          'onReady': YT_HELPER.debug,
+                          'onStateChange': YT_HELPER.debug
+                        }
+                    });
+                }
+
+                // hide the news list
+                views.newsList.el.hide();
+
+                // show the news item
+                views.newsItem.el.show();
+            }
+
+            // fire hash change for deep linking
+            window.onhashchange();
         });
     });
 });

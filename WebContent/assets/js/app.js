@@ -34,10 +34,12 @@ $(function()
     var NewsItemsCollection = function()
     {
         var collection = [ ];
-        var idToIndex = { };
         var that = this;
 
-        this.push = collection.push;
+        this.push = function(item)
+        {
+            collection.push(item);
+        };
 
         this.at = function(index)
         {
@@ -46,28 +48,19 @@ $(function()
 
         this.get = function(id)
         {
-            try
-            {
-                // is this result cached?
-                return collection[idToIndex[id]];
-            }
-            catch (e)
-            {
-                var item;
+            var item;
 
-                for (var i = collection.length - 1; i >= 0; i--)
+            for (var i = collection.length - 1; i >= 0; i--)
+            {
+                item = collection[i];
+
+                if (item.id === id)
                 {
-                    item = collection[i];
-
-                    if (item.id === id)
-                    {
-                        // cache the result
-                        idToIndex[id] = i;
-
-                        return item;
-                    }
+                    return item;
                 }
             }
+
+            throw new Error('No item with ID ' + id);
         }
     }
 
@@ -108,9 +101,8 @@ $(function()
         var newsItemsCollection;
         var views;
 
-        // it's all based on promisies, so here goes...
-        $.getJSON(FEED_URL)
-        .then(function(data)
+        // our functions
+        var handleData = function(data)
         {
             var dfd = new $.Deferred;
             var entries = data.feed.entry;
@@ -134,8 +126,9 @@ $(function()
             dfd.resolve();
 
             return dfd;
-        })
-        .then(function()
+        };
+
+        var prepareViews = function()
         {
             var dfd = new $.Deferred;
 
@@ -149,8 +142,9 @@ $(function()
             dfd.resolve();
 
             return dfd;
-        })
-        .then(function()
+        };
+
+        var showFeedList = function()
         {
             // finally populate our news list
             views.newsList.render({
@@ -160,19 +154,16 @@ $(function()
             // and hide our loader and news item
             views.loader.el.hide();
             views.newsItem.el.hide();
-        }).done(function()
-        {
-            // set up hash listener
-            window.onhashchange = function()
+        };
+
+        var handleHashChange = function()
             {
                 var id = window.location.hash.replace('#', '');
 
                 if (!id)
                 {
-                    return;
+                    showFeedList();
                 }
-
-                console.log(newsItemsCollection);
 
                 // render the news item
                 views.newsItem.render(
@@ -202,7 +193,16 @@ $(function()
 
                 // show the news item
                 views.newsItem.el.show();
-            }
+            };
+
+        // it's all based on promisies, so here goes...
+        $.getJSON(FEED_URL)
+        .then(handleData)
+        .then(prepareViews)
+        .then(showFeedList).done(function()
+        {
+            // set up hash listener
+            window.onhashchange = handleHashChange;
 
             // fire hash change for deep linking
             window.onhashchange();

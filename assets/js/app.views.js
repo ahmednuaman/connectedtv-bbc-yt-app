@@ -26,9 +26,12 @@ var LoaderView = Backbone.View.extend({
 var ListView = Backbone.View.extend({
     el: $('#list-view'),
 
+    collection: new VideoItemsCollection(),
+
     initialize: function()
     {
-
+        // populate our collection
+        this.collection.fetch();
     },
 
     render: function()
@@ -59,5 +62,6 @@ var AppView = Backbone.View.extend({
     {
         // initilize all the app's views
         this.views.loaderView = new LoaderView();
+        this.views.listView = new ListView();
     }
 });

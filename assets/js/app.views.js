@@ -23,6 +23,32 @@ var LoaderView = Backbone.View.extend({
     }
 });
 
+var ListView = Backbone.View.extend({
+    el: $('#list-view'),
+
+    initialize: function()
+    {
+
+    },
+
+    render: function()
+    {
+
+    }
+});
+
+var ListItemView = Backbone.View.extend({
+    initialize: function()
+    {
+
+    },
+
+    render: function()
+    {
+
+    }
+});
+
 var AppView = Backbone.View.extend({
     el: $('body'),
 

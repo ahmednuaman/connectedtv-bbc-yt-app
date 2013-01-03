@@ -102,15 +102,24 @@ var ListView = BaseView.extend({
 var PlayerView = BaseView.extend({
     el: $('#player-view'),
 
-
     template: Handlebars.compile($('#player-view-template').html()),
 
     show: function(videoItemModel)
     {
-        console.log(videoItemModel)
+        // ref this
+        var that = this;
 
-        // super
-        this.constructor.__super__.show.apply(this);
+        // set the model
+        this.model = videoItemModel;
+
+        // listen to when this view is rendered and then show it
+        this.once('rendered', function()
+        {
+            that.constructor.__super__.show.apply(that);
+        });
+
+        // render the view
+        this.render();
     },
 
     hide: function()
@@ -122,7 +131,7 @@ var PlayerView = BaseView.extend({
     render: function()
     {
         // super
-        this.constructor.__super__.render.apply(this);
+        this.constructor.__super__.render.apply(this, [this.model]);
     },
 });
 
@@ -134,6 +143,12 @@ var AppView = BaseView.extend({
 
     // keep a reference of the app's views
     views: { },
+
+    hideLoaderView: function()
+    {
+        // hide the loader
+        this.views.loaderView.hide();
+    },
 
     showListView: function()
     {
@@ -158,6 +173,12 @@ var AppView = BaseView.extend({
         );
     },
 
+    startHistory: function()
+    {
+        // begin monitoring routes
+        Backbone.history.start();
+    },
+
     initialize: function()
     {
         // ref this
@@ -170,11 +191,8 @@ var AppView = BaseView.extend({
 
         // bind any events
         this.views.listView.on('rendered', this.showListView, this);
-        this.views.listView.on('rendered', function()
-        {
-            // begin monitoring routes
-            Backbone.history.start();
-        });
+        this.views.listView.on('rendered', this.startHistory, this);
+        this.views.playerView.on('rendered', this.hideLoaderView, this);
 
         // bind any routes
         this.router.on('route:index', this.showListView, this);

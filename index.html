@@ -10,11 +10,21 @@
     </head>
     <body>
         <div id="list-view">
-
+            <script id="list-view-template" type="text/x-handlebars-template">
+                <ul>
+                    {{#each items}}
+                        <li id="{{id}}">
+                            <a href="#/{{id}}" title="{{title}}">
+                                <span>
+                                    {{title}}
+                                </span>
+                            </a>
+                        </li>
+                    {{/each}}
+                </ul>
+            </script>
         </div>
-        <div id="player-view">
-
-        </div>
+        <div id="player-view"></div>
         <div id="loader-view"></div>
         <script src="assets/js/vendor/jquery-1.8.3.js"></script>
         <script src="assets/js/vendor/handlebars-1.0.rc.1.js"></script>

@@ -102,11 +102,21 @@ var ListView = BaseView.extend({
 var PlayerView = BaseView.extend({
     el: $('#player-view'),
 
+
     template: Handlebars.compile($('#player-view-template').html()),
 
-    initialize: function()
+    show: function(videoItemModel)
     {
+        console.log(videoItemModel)
 
+        // super
+        this.constructor.__super__.show.apply(this);
+    },
+
+    hide: function()
+    {
+        // super
+        this.constructor.__super__.hide.apply(this);
     },
 
     render: function()
@@ -143,7 +153,9 @@ var AppView = BaseView.extend({
         this.views.listView.hide();
 
         // load the player
-        this.views.playerView.show(id);
+        this.views.playerView.show(
+            this.views.listView.collection.get(id)
+        );
     },
 
     initialize: function()
@@ -158,6 +170,11 @@ var AppView = BaseView.extend({
 
         // bind any events
         this.views.listView.on('rendered', this.showListView, this);
+        this.views.listView.on('rendered', function()
+        {
+            // begin monitoring routes
+            Backbone.history.start();
+        });
 
         // bind any routes
         this.router.on('route:index', this.showListView, this);

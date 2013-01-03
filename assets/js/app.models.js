@@ -7,10 +7,12 @@ and one collection:
 */
 
 var VideoItemModel = Backbone.Model.extend({
-    id: '',
-    title: '',
-    description: '',
-    thumbnail: ''
+    defaults: {
+        id: '',
+        title: '',
+        description: '',
+        thumbnail: ''
+    }
 });
 
 var VideoItemsCollection = Backbone.Collection.extend({

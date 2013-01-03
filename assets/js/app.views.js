@@ -93,19 +93,6 @@ var ListView = BaseView.extend({
     }
 });
 
-var ListItemView = BaseView.extend({
-    initialize: function()
-    {
-
-    },
-
-    render: function()
-    {
-        // super
-        this.constructor.__super__.render.apply(this);
-    }
-});
-
 var AppView = BaseView.extend({
     el: $('body'),
 

@@ -7,7 +7,38 @@ our app has four views:
 - and our app
 */
 
-var LoaderView = Backbone.View.extend({
+// first start with our base view
+var BaseView = Backbone.View.extend({
+    show: function()
+    {
+        // ref this
+        var that = this;
+
+        $(this.el).fadeIn('normal', function()
+        {
+            that.trigger('shown');
+        });
+    },
+
+    hide: function()
+    {
+        // ref this
+        var that = this;
+
+        $(this.el).fadeOut('normal', function()
+        {
+            that.trigger('hidden');
+        });
+    },
+
+    render: function()
+    {
+        // trigger a rendered event
+        this.trigger('rendered');
+    }
+});
+
+var LoaderView = BaseView.extend({
     el: $('#loader-view'),
 
     initialize: function()
@@ -18,12 +49,15 @@ var LoaderView = Backbone.View.extend({
 
     render: function()
     {
+        // super
+        this.constructor.__super__.render.apply(this);
+
         // so on render we show it to hide the other views
         $(this.el).show();
     }
 });
 
-var ListView = Backbone.View.extend({
+var ListView = BaseView.extend({
     el: $('#list-view'),
 
     collection: new VideoItemsCollection(),
@@ -53,10 +87,13 @@ var ListView = Backbone.View.extend({
 
         // replace current HTML
         $(this.el).html(html);
+
+        // super
+        this.constructor.__super__.render.apply(this);
     }
 });
 
-var ListItemView = Backbone.View.extend({
+var ListItemView = BaseView.extend({
     initialize: function()
     {
 
@@ -64,11 +101,12 @@ var ListItemView = Backbone.View.extend({
 
     render: function()
     {
-
+        // super
+        this.constructor.__super__.render.apply(this);
     }
 });
 
-var AppView = Backbone.View.extend({
+var AppView = BaseView.extend({
     el: $('body'),
 
     // keep a reference of the app's views
@@ -76,8 +114,18 @@ var AppView = Backbone.View.extend({
 
     initialize: function()
     {
+        // ref this
+        var that = this;
+
         // initilize all the app's views
         this.views.loaderView = new LoaderView();
         this.views.listView = new ListView();
+
+        // bind any events
+        this.views.listView.on('rendered', function()
+        {
+            // hide the loader
+            that.views.loaderView.hide();
+        });
     }
 });

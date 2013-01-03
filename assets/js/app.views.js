@@ -14,7 +14,7 @@ var BaseView = Backbone.View.extend({
         // ref this
         var that = this;
 
-        $(this.el).fadeIn('normal', function()
+        this.$el.fadeIn('normal', function()
         {
             that.trigger('shown');
         });
@@ -25,7 +25,7 @@ var BaseView = Backbone.View.extend({
         // ref this
         var that = this;
 
-        $(this.el).fadeOut('normal', function()
+        this.$el.fadeOut('normal', function()
         {
             that.trigger('hidden');
         });
@@ -37,7 +37,7 @@ var BaseView = Backbone.View.extend({
         if (arguments[0])
         {
             // compile and replace current HTML
-            $(this.el).html(
+            this.$el.html(
                 this.template(arguments[0])
             );
         }
@@ -62,7 +62,7 @@ var LoaderView = BaseView.extend({
         this.constructor.__super__.render.apply(this);
 
         // so on render we show it to hide the other views
-        $(this.el).show();
+        this.$el.show();
     }
 });
 
@@ -124,6 +124,9 @@ var PlayerView = BaseView.extend({
 
     hide: function()
     {
+        // empty the view
+        this.$el.empty();
+
         // super
         this.constructor.__super__.hide.apply(this);
     },
@@ -154,6 +157,9 @@ var AppView = BaseView.extend({
     {
         // hide the player view
         this.views.playerView.hide();
+
+        // show the list
+        this.views.listView.show();
 
         // hide the loader
         this.views.loaderView.hide();

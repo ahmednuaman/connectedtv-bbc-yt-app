@@ -28,15 +28,31 @@ var ListView = Backbone.View.extend({
 
     collection: new VideoItemsCollection(),
 
+    template: Handlebars.compile($('#list-view-template').html()),
+
     initialize: function()
     {
+        // ref this
+        var that = this;
+
         // populate our collection
-        this.collection.fetch();
+        this.collection.fetch({
+            success: function()
+            {
+                that.render();
+            }
+        });
     },
 
     render: function()
     {
+        // compile
+        var html = this.template({
+            items: this.collection.toJSON()
+        });
 
+        // replace current HTML
+        $(this.el).html(html);
     }
 });
 

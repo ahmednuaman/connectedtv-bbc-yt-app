@@ -33,6 +33,15 @@ var BaseView = Backbone.View.extend({
 
     render: function()
     {
+        // do we need to compile anything?
+        if (arguments[0])
+        {
+            // compile and replace current HTML
+            $(this.el).html(
+                this.template(arguments[0])
+            );
+        }
+
         // trigger a rendered event
         this.trigger('rendered');
     }
@@ -80,21 +89,20 @@ var ListView = BaseView.extend({
 
     render: function()
     {
-        // compile
-        var html = this.template({
+        // set items
+        var items = {
             items: this.collection.toJSON()
-        });
-
-        // replace current HTML
-        $(this.el).html(html);
+        };
 
         // super
-        this.constructor.__super__.render.apply(this);
+        this.constructor.__super__.render.apply(this, [items]);
     }
 });
 
 var PlayerView = BaseView.extend({
     el: $('#player-view'),
+
+    template: Handlebars.compile($('#player-view-template').html()),
 
     initialize: function()
     {
@@ -111,8 +119,32 @@ var PlayerView = BaseView.extend({
 var AppView = BaseView.extend({
     el: $('body'),
 
+    // add router,
+    router: new AppRouter(),
+
     // keep a reference of the app's views
     views: { },
+
+    showListView: function()
+    {
+        // hide the player view
+        this.views.playerView.hide();
+
+        // hide the loader
+        this.views.loaderView.hide();
+    },
+
+    showPlayerView: function(id)
+    {
+        // show the loader while we wait for the video to queue
+        this.views.loaderView.show();
+
+        // hide the list
+        this.views.listView.hide();
+
+        // load the player
+        this.views.playerView.show(id);
+    },
 
     initialize: function()
     {
@@ -121,17 +153,14 @@ var AppView = BaseView.extend({
 
         // initilize all the app's views
         this.views.loaderView = new LoaderView();
-        this.views.listView = new ListView();
         this.views.playerView = new PlayerView();
+        this.views.listView = new ListView();
 
         // bind any events
-        this.views.listView.on('rendered', function()
-        {
-            // hide the player view
-            that.views.playerView.hide();
+        this.views.listView.on('rendered', this.showListView, this);
 
-            // hide the loader
-            that.views.loaderView.hide();
-        });
+        // bind any routes
+        this.router.on('route:index', this.showListView, this);
+        this.router.on('route:video', this.showPlayerView, this);
     }
 });

@@ -6,7 +6,7 @@ our app has two routes:
 
 var AppRouter = Backbone.Router.extend({
     routes: {
-        '': 'index',
-        'video/:id', 'video'
+        'video/:id': 'video',
+        '.*': 'index'
     }
 });

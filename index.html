@@ -25,8 +25,12 @@
             </script>
         </div>
         <div id="player-view">
-            <div id="player-view-holder"></div>
-            <a href="#" title="Go back">Go back</a>
+            <script id="player-view-template" type="text/x-handlebars-template">
+                <div id="player-view-holder">
+                    <iframe src="{{url}}"></iframe>
+                </div>
+                <a href="#" title="Go back">Go back</a>
+            </script>
         </div>
         <div id="loader-view"></div>
         <script src="assets/js/vendor/jquery-1.8.3.js"></script>
@@ -34,8 +38,8 @@
         <script src="assets/js/vendor/lodash.underscore-1.0.0.rc.3.js"></script>
         <script src="assets/js/vendor/backbone-0.9.9.js"></script>
         <script src="assets/js/app.models.js"></script>
-        <script src="assets/js/app.views.js"></script>
         <script src="assets/js/app.routes.js"></script>
+        <script src="assets/js/app.views.js"></script>
         <script src="assets/js/app.js"></script>
     </body>
 </html>

@@ -93,6 +93,21 @@ var ListView = BaseView.extend({
     }
 });
 
+var PlayerView = BaseView.extend({
+    el: $('#player-view'),
+
+    initialize: function()
+    {
+
+    },
+
+    render: function()
+    {
+        // super
+        this.constructor.__super__.render.apply(this);
+    },
+});
+
 var AppView = BaseView.extend({
     el: $('body'),
 
@@ -107,10 +122,14 @@ var AppView = BaseView.extend({
         // initilize all the app's views
         this.views.loaderView = new LoaderView();
         this.views.listView = new ListView();
+        this.views.playerView = new PlayerView();
 
         // bind any events
         this.views.listView.on('rendered', function()
         {
+            // hide the player view
+            that.views.playerView.hide();
+
             // hide the loader
             that.views.loaderView.hide();
         });

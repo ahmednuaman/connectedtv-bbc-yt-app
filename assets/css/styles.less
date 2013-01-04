@@ -12,6 +12,62 @@
     position: fixed;
 }
 
+.float(@pos:left) {
+    .block;
+    float: @pos;
+}
+
+body {
+    background: #333333;
+}
+
+a {
+    color: #ffffff;
+    text-decoration: none;
+
+    &:hover,
+    &active {
+        border-bottom: 1px solid #ffffff;
+    }
+}
+
+#list-view {
+    padding: 20px 0 20px 20px;
+
+    ul {
+        margin: 0;
+        padding: 0;
+    }
+
+    li {
+        list-style: none;
+        display: inline;
+    }
+
+    a {
+        .float;
+        width: 400px;
+        height: 400px;
+        margin: 0 20px 20px 0;
+        text-align: center;
+
+        &:hover {
+            width: 380px;
+            height: 380px;
+            padding: 10px;
+            border-radius: 10px;
+            border: none;
+            background: #000000;
+        }
+
+        img {
+            width: 100%;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+    }
+}
+
 #loader-view {
     .fixed;
     width: 100%;

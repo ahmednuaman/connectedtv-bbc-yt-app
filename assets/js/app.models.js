@@ -6,6 +6,9 @@ and one collection:
 - video items
 */
 
+// strict yo
+'use strict';
+
 var VideoItemModel = Backbone.Model.extend({
     defaults: {
         id: '',

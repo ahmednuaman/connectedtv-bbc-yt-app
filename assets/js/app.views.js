@@ -7,6 +7,9 @@ our app has four views:
 - and our app
 */
 
+// strict yo
+'use strict';
+
 // first start with our base view
 var BaseView = Backbone.View.extend({
     show: function()

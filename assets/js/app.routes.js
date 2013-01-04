@@ -4,6 +4,9 @@ our app has two routes:
 - player
 */
 
+// strict yo
+'use strict';
+
 var AppRouter = Backbone.Router.extend({
     routes: {
         'video/:id': 'video',

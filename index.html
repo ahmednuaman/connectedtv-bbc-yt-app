@@ -27,11 +27,12 @@
         </div>
         <div id="player-view">
             <script id="player-view-template" type="text/x-handlebars-template">
+                <div id="player-view-header">
+                    <a href="#" title="Go back">&laquo; Go back</a>
+                    <h1>{{title}}</h1>
+                </div>
                 <div id="player-view-holder">
                     <iframe src="http://www.youtube.com/embed/{{id}}"></iframe>
-                </div>
-                <div id="player-view-header">
-                    <a href="#" title="Go back">Go back</a>
                 </div>
             </script>
         </div>

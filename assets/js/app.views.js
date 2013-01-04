@@ -137,7 +137,7 @@ var PlayerView = BaseView.extend({
     render: function()
     {
         // super
-        this.constructor.__super__.render.apply(this, [this.model]);
+        this.constructor.__super__.render.apply(this, [this.model.toJSON()]);
     },
 });
 

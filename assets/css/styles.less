@@ -17,12 +17,22 @@
     float: @pos;
 }
 
+.relative {
+    display: block;
+    position: relative;
+}
+
 body {
     background: #333333;
 }
 
-a {
+a,
+p,
+h1 {
     color: #ffffff;
+}
+
+a {
     text-decoration: none;
 
     &:hover,
@@ -64,6 +74,35 @@ a {
             width: 100%;
             border-radius: 5px;
             margin-bottom: 10px;
+        }
+    }
+}
+
+#player-view {
+    #player-view-holder,
+    #player-view-header {
+        .relative;
+        width: 100%;
+    }
+
+    #player-view-header {
+        padding: 15px;
+        height: 35px;
+        background: #000000;
+        text-align: center;
+
+        a {
+            .absolute;
+            padding: 8px;
+            background: #333333;
+            border-radius: 5px;
+            border: 1px solid #666666;
+        }
+
+        h1 {
+            font-weight: lighter;
+            font-size: 1.5em;
+            margin-top: 2px;
         }
     }
 }

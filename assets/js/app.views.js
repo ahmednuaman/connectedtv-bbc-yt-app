@@ -118,6 +118,11 @@ var PlayerView = BaseView.extend({
         // listen to when this view is rendered and then show it
         this.once('rendered', function()
         {
+            // apply a height fix for the player
+            that.$el.find('#player-view-holder iframe').css({
+                height: $(window).height() - that.$el.find('#player-view-header').outerHeight()
+            });
+
             that.constructor.__super__.show.apply(that);
         });
 

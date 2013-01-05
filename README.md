@@ -20,7 +20,10 @@ _All_ it does is load a feed off YouTube's GData service, creates a tile list of
 5. Once you've got your app ready (usually on a USB stick), don't forget to sign in to your TV and then you're ready to play with the app!
 
 ### Or
-If you can access your TV's web browser then you can either run the app on your local network or visit the hosted version of the app (on Github): [http://ahmednuaman.github.com/connectedtv-bbc-yt-app/](http://ahmednuaman.github.com/connectedtv-bbc-yt-app/)
+If you can access your TV's web browser then you can either run the app on your local network or visit the hosted version of the app (on Github): 
+
+- [http://ahmednuaman.github.com/connectedtv-bbc-yt-app/libraries/](http://ahmednuaman.github.com/connectedtv-bbc-yt-app/libraries/) (the libraries version)
+- [http://ahmednuaman.github.com/connectedtv-bbc-yt-app/vanilla/](http://ahmednuaman.github.com/connectedtv-bbc-yt-app/vanilla/) (the vanilla version)
 
 ## Why did you do this?
 Well, why not? More and more of us have smart connected devices but we're not making the most of them. Let's see how far we can go with them and how we can handle graceful degregation in terms of styles, processing power and Javascript engines.

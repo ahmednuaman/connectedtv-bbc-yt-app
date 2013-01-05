@@ -24,3 +24,8 @@ If you can access your TV's web browser then you can either run the app on your 
 
 ## Why did you do this?
 Well, why not? More and more of us have smart connected devices but we're not making the most of them. Let's see how far we can go with them and how we can handle graceful degregation in terms of styles, processing power and Javascript engines.
+
+## Is there a vanilla version?
+Well, actually, yes, there is. The master  branch is a simple proof-of-concept that uses all the latest new-fangled frameworks and stuff. However, not all smart TV browser engines are the same and so I have created a [bare](https://github.com/ahmednuaman/connectedtv-bbc-yt-app/branches) branch that's a pure vanilla version of the app without any dependancies. 
+
+The idea is to see which one performs better, one that has lots of libraries and makes development _easier_ or one that's written from the ground up where I have control over everything.

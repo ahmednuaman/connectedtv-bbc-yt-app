@@ -131,6 +131,9 @@ function PlayerView()
         // listen to when this view is rendered and then show it
         this.once('rendered', this.playVideo, this);
 
+        // then when it's shown we fix the player height
+        this.once('shown', this.fixPlayerHeight, this);
+
         // render the view
         this.render();
     };
@@ -144,11 +147,14 @@ function PlayerView()
         this.constructor.prototype.hide.apply(this);
     };
 
-    this.playVideo = function()
+    this.fixPlayerHeight = function()
     {
         // apply a height fix for the player
-        document.getElementById('player-view-holder-iframe').style.height = window.outerHeight - document.getElementById('player-view-header').outerHeight;
+        document.getElementById('player-view-holder-iframe').style.height = (window.innerHeight - document.getElementById('player-view-header').offsetHeight) + 'px';
+    };
 
+    this.playVideo = function()
+    {
         this.constructor.prototype.show.apply(this);
     };
 

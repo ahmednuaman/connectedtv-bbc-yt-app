@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html class="no-js">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0" />
+        <link rel="stylesheet" type="text/css" href="assets/css/styles.css" />
+        <title>BBC YT Connected TV Concept</title>
+    </head>
+    <body>
+        <div id="list-view">
+            <ul id="list-view-container">
+                <script id="list-view-container-template" type="text/plain">
+                    <li id="{{id}}">
+                        <a href="#video/{{id}}" title="{{title}}">
+                            <img src="{{thumbnail}}" alt="{{title}}" />
+                            <span>
+                                {{title}}
+                            </span>
+                        </a>
+                    </li>
+                </script>
+            </ul>
+        </div>
+        <div id="player-view">
+            <script id="player-view-template" type="text/plain">
+                <div id="player-view-header">
+                    <a href="#" title="Go back">&laquo; Go back</a>
+                    <h1>{{title}}</h1>
+                </div>
+                <div id="player-view-holder">
+                    <iframe id="player-view-holder-iframe" src="http://www.youtube.com/embed/{{id}}"></iframe>
+                </div>
+            </script>
+        </div>
+        <div id="loader-view"></div>
+        <script src="assets/js/app.helper.js"></script>
+        <script src="assets/js/app.base.js"></script>
+        <script src="assets/js/app.models.js"></script>
+        <script src="assets/js/app.routes.js"></script>
+        <script src="assets/js/app.views.js"></script>
+        <script src="assets/js/app.js"></script>
+    </body>
+</html>

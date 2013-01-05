@@ -227,8 +227,8 @@ function AppView()
         this.views.listView = new ListView();
 
         // bind any events
-        this.views.listView.on('rendered', this.showListView, this);
         this.views.listView.on('rendered', this.startHistory, this);
+        this.views.listView.on('rendered', this.showListView, this);
         this.views.playerView.on('rendered', this.hideLoaderView, this);
 
         // bind any routes

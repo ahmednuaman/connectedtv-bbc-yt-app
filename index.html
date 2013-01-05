@@ -23,15 +23,19 @@
             </ul>
         </div>
         <div id="player-view">
-            <div id="player-view-header">
-                <a href="#" title="Go back">&laquo; Go back</a>
-                <h1 id="player-view-header-title"></h1>
-            </div>
-            <div id="player-view-holder">
-                <iframe id="player-view-holder-iframe"></iframe>
-            </div>
+            <script id="player-view-template" type="text/plain">
+                <div id="player-view-header">
+                    <a href="#" title="Go back">&laquo; Go back</a>
+                    <h1>{{title}}</h1>
+                </div>
+                <div id="player-view-holder">
+                    <iframe id="player-view-holder-iframe" src="http://www.youtube.com/embed/{{id}}"></iframe>
+                </div>
+            </script>
         </div>
         <div id="loader-view"></div>
+        <script src="assets/js/app.helper.js"></script>
+        <script src="assets/js/app.base.js"></script>
         <script src="assets/js/app.models.js"></script>
         <script src="assets/js/app.routes.js"></script>
         <script src="assets/js/app.views.js"></script>

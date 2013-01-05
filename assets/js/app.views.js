@@ -10,158 +10,178 @@ our app has four views:
 // strict yo
 'use strict';
 
-// first start with our base view
-var BaseView = Backbone.View.extend({
-    show: function()
-    {
-        // ref this
-        var that = this;
+// first start with our base view, extending dispatcher
+BaseView.prototype = new Dispatcher();
+BaseView.prototype.constructor = BaseView;
 
-        this.$el.fadeIn('normal', function()
-        {
-            that.trigger('shown');
-        });
+function BaseView()
+{
+    this.show = function()
+    {
+        this.el.style.display = '';
+
+        // trigger a shown event
+        this.trigger('shown');
     },
 
-    hide: function()
+    this.hide = function()
     {
-        // ref this
-        var that = this;
+        this.el.style.display = 'none';
 
-        this.$el.fadeOut('normal', function()
-        {
-            that.trigger('hidden');
-        });
+        // trigger a hidden event
+        this.trigger('hidden');
     },
 
-    render: function()
+    this.render = function()
     {
         // do we need to compile anything?
         if (arguments[0])
         {
+            // declare the element
+            var el = this['templateEl'] || this.el;
+
             // compile and replace current HTML
-            this.$el.html(
-                this.template(arguments[0])
-            );
+            el.innerHTML = arguments[0];
         }
 
         // trigger a rendered event
         this.trigger('rendered');
     }
-});
+};
 
-var LoaderView = BaseView.extend({
-    el: $('#loader-view'),
+// inherit baseview
+LoaderView.prototype = new BaseView();
+LoaderView.prototype.constructor = LoaderView;
 
-    initialize: function()
+function LoaderView()
+{
+    // set our element
+    this.el = document.getElementById('loader-view');
+
+    this.initialize = function()
     {
         // this view is self rendering
         this.render();
-    },
+    };
 
-    render: function()
+    this.render = function()
     {
         // super
-        this.constructor.__super__.render.apply(this);
+        this.constructor.prototype.render.apply(this);
 
         // so on render we show it to hide the other views
-        this.$el.show();
-    }
-});
+        this.show();
+    };
 
-var ListView = BaseView.extend({
-    el: $('#list-view'),
+    // run!
+    this.initialize();
+};
 
-    collection: new VideoItemsCollection(),
+ListView.prototype = new BaseView();
+ListView.prototype.constructor = ListView;
 
-    template: Handlebars.compile($('#list-view-template').html()),
+function ListView()
+{
+    this.el = document.getElementById('list-view');
 
-    initialize: function()
+    // if there's a template container, set it
+    this.templateEl = document.getElementById('list-view-container');
+
+    // and if there's a template, get it ready
+    this.template = document.getElementById('list-view-container-template').innerHTML;
+
+    // set our collection
+    this.collection = new VideoItemsCollection();
+
+    this.initialize = function()
     {
-        // ref this
-        var that = this;
-
         // populate our collection
-        this.collection.fetch({
-            success: function()
-            {
-                that.render();
-            }
-        });
+        this.collection.fetch(this.render, this);
     },
 
-    render: function()
+    this.render = function()
     {
-        // set items
-        var items = {
-            items: this.collection.toJSON()
-        };
-
         // super
-        this.constructor.__super__.render.apply(this, [items]);
+        this.constructor.prototype.render.apply(this, [
+            AppHelper.renderTemplateArray(
+                this.template,
+                this.collection.toJSON()
+            )
+        ]);
     }
-});
+};
 
-var PlayerView = BaseView.extend({
-    el: $('#player-view'),
+PlayerView.prototype = new BaseView();
+PlayerView.prototype.constructor = PlayerView;
 
-    template: Handlebars.compile($('#player-view-template').html()),
+function PlayerView()
+{
+    this.el = document.getElementById('player-view');
 
-    show: function(videoItemModel)
+    this.template = document.getElementById('player-view-template').innerHTML;
+
+    // keep a ref to this view's model
+    this.model = null;
+
+    this.show = function(videoItemModel)
     {
-        // ref this
-        var that = this;
-
         // set the model
         this.model = videoItemModel;
 
         // listen to when this view is rendered and then show it
-        this.once('rendered', function()
-        {
-            // apply a height fix for the player
-            that.$el.find('#player-view-holder iframe').css({
-                height: $(window).height() - that.$el.find('#player-view-header').outerHeight()
-            });
-
-            that.constructor.__super__.show.apply(that);
-        });
+        this.once('rendered', this.playVideo, this);
 
         // render the view
         this.render();
-    },
+    };
 
-    hide: function()
+    this.hide = function()
     {
         // empty the view
-        this.$el.empty();
+        this.el.innerHTML = '';
 
         // super
-        this.constructor.__super__.hide.apply(this);
-    },
+        this.constructor.prototype.hide.apply(this);
+    };
 
-    render: function()
+    this.playVideo = function()
+    {
+        // apply a height fix for the player
+        document.getElementById('player-view-holder-iframe').style.height = window.outerHeight - document.getElementById('player-view-header').outerHeight;
+
+        this.constructor.prototype.show.apply(this);
+    };
+
+    this.render = function()
     {
         // super
-        this.constructor.__super__.render.apply(this, [this.model.toJSON()]);
-    },
-});
+        this.constructor.prototype.render.apply(this, [
+            AppHelper.renderTemplate(
+                this.template,
+                this.model
+            )
+        ]);
+    };
+};
 
-var AppView = BaseView.extend({
-    el: $('body'),
+AppView.prototype = new BaseView();
+AppView.prototype.constructor = AppView;
 
-    // add router,
-    router: new AppRouter(),
+function AppView()
+{
+    // add router
+    this.router = new AppRouter();
 
     // keep a reference of the app's views
-    views: { },
+    this.views = { };
 
-    hideLoaderView: function()
+    this.hideLoaderView = function()
     {
         // hide the loader
         this.views.loaderView.hide();
-    },
+    };
 
-    showListView: function()
+    this.showListView = function()
     {
         // hide the player view
         this.views.playerView.hide();
@@ -171,9 +191,9 @@ var AppView = BaseView.extend({
 
         // hide the loader
         this.views.loaderView.hide();
-    },
+    };
 
-    showPlayerView: function(id)
+    this.showPlayerView = function(id)
     {
         // show the loader while we wait for the video to queue
         this.views.loaderView.show();
@@ -185,19 +205,16 @@ var AppView = BaseView.extend({
         this.views.playerView.show(
             this.views.listView.collection.get(id)
         );
-    },
+    };
 
-    startHistory: function()
+    this.startHistory = function()
     {
-        // begin monitoring routes
-        Backbone.history.start();
-    },
+        // begin listening to hashchange
+        this.router.initialize();
+    }
 
-    initialize: function()
+    this.initialize = function()
     {
-        // ref this
-        var that = this;
-
         // initilize all the app's views
         this.views.loaderView = new LoaderView();
         this.views.playerView = new PlayerView();
@@ -209,7 +226,13 @@ var AppView = BaseView.extend({
         this.views.playerView.on('rendered', this.hideLoaderView, this);
 
         // bind any routes
-        this.router.on('route:index', this.showListView, this);
-        this.router.on('route:video', this.showPlayerView, this);
-    }
-});
+        this.router.on('index', this.showListView, this);
+        this.router.on('video', this.showPlayerView, this);
+
+        // start initialize list view
+        this.views.listView.initialize();
+    };
+
+    // run!
+    this.initialize();
+};

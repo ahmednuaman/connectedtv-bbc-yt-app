@@ -32,7 +32,7 @@ var VideoItemsCollection = function()
     var dataURL = 'http://gdata.youtube.com/feeds/api/users/bbc/uploads?max-results=12&alt=json&orderby=published&format=1,5,6&callback=';
 
     // create a func to parse our data
-    var parse = function(response)
+    var parse = function(response, callback, context)
     {
         var feed = response.feed.entry;
         var entry;
@@ -52,18 +52,21 @@ var VideoItemsCollection = function()
             // add to models store
             models[model.id] = model;
         }
+
+        // fire the callback
+        callback.call(context);
     }
 
     // create temp func name
     var funcName = 'videoItemsCollectionParse' + (new Date()).getTime();
 
     // create fetch function
-    this.fetch = function()
+    this.fetch = function(callback, context)
     {
         // create a temp reference to our parse function
         window[funcName] = function(response)
         {
-            return parse.apply(that, [response]);
+            return parse.apply(that, [response, callback, context]);
         };
 
         // load the json async'ly
@@ -77,5 +80,11 @@ var VideoItemsCollection = function()
     this.get = function(id)
     {
         return models[id];
+    }
+
+    // get all the data as a json hash, just return the models really!
+    this.toJSON = function()
+    {
+        return models;
     }
 };

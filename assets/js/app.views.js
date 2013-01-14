@@ -22,7 +22,7 @@ function BaseView()
 
         // trigger a shown event
         this.trigger('shown');
-    },
+    };
 
     this.hide = function()
     {
@@ -30,7 +30,7 @@ function BaseView()
 
         // trigger a hidden event
         this.trigger('hidden');
-    },
+    };
 
     this.render = function()
     {
@@ -46,8 +46,8 @@ function BaseView()
 
         // trigger a rendered event
         this.trigger('rendered');
-    }
-};
+    };
+}
 
 // inherit baseview
 LoaderView.prototype = new BaseView();
@@ -75,7 +75,7 @@ function LoaderView()
 
     // run!
     this.initialize();
-};
+}
 
 ListView.prototype = new BaseView();
 ListView.prototype.constructor = ListView;
@@ -97,7 +97,7 @@ function ListView()
     {
         // populate our collection
         this.collection.fetch(this.render, this);
-    },
+    };
 
     this.render = function()
     {
@@ -108,8 +108,8 @@ function ListView()
                 this.collection.toJSON()
             )
         ]);
-    }
-};
+    };
+}
 
 PlayerView.prototype = new BaseView();
 PlayerView.prototype.constructor = PlayerView;
@@ -168,7 +168,7 @@ function PlayerView()
             )
         ]);
     };
-};
+}
 
 AppView.prototype = new BaseView();
 AppView.prototype.constructor = AppView;
@@ -217,7 +217,7 @@ function AppView()
     {
         // begin listening to hashchange
         this.router.initialize();
-    }
+    };
 
     this.initialize = function()
     {
@@ -241,4 +241,4 @@ function AppView()
 
     // run!
     this.initialize();
-};
+}

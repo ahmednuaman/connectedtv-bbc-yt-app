@@ -36,7 +36,7 @@ function AppRouter()
                  // otherwise just return false
                  return false;
             }
-        }
+        };
     };
 
     // our hashchange handler

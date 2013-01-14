@@ -17,7 +17,7 @@ var VideoItemModel = function(data)
         title: data.title,
         description: data.description,
         thumbnail: data.thumbnail
-    }
+    };
 };
 
 var VideoItemsCollection = function()

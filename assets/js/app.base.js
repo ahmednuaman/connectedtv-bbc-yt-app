@@ -35,7 +35,7 @@ function Dispatcher()
             callback: callback,
             context: context
         });
-    }
+    };
 
     this.on = function(event, callback, context)
     {
@@ -45,7 +45,7 @@ function Dispatcher()
     this.once = function(event, callback, context)
     {
         addCallback.apply(this, [event, callback, context, true]);
-    }
+    };
 
     this.trigger = function(event)
     {

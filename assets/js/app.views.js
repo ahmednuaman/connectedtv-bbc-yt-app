@@ -219,11 +219,59 @@ function AppView()
         this.router.initialize();
     };
 
+    this.initalizeDevice = function()
+    {
+        // assign a var to our dummy anchor
+        var keyHandler = document.getElementById('key-handler');
+
+        // keep a ref
+        var that = this;
+
+        // force focus on to dummy anchor to get keys working
+        keyHandler.focus();
+
+        // now listen for keydown events
+        keyHandler.onkeydown = function()
+        {
+            that.handleKeyDown.apply(that, arguments);
+        };
+
+        // this should really be refactored to act as a wrapper rather than device specific
+        api.tv.widget.sendReadyEvent();
+    };
+
+    this.handleKeyDown = function(event)
+    {
+        // prob it's not a good idea to cancel the event
+        // event.preventDefault();
+
+        switch (event.keyCode)
+        {
+            case api.tv.key.KEY_RETURN:
+                // go back
+                window.history.go(-1);
+
+            break;
+
+            case api.tv.key.KEY_LEFT:
+            case api.tv.key.KEY_RIGHT:
+            case api.tv.key.KEY_DOWN:
+            case api.tv.key.KEY_UP:
+                // handle navigation key
+
+            break;
+
+            case api.tv.key.KEY_ENTER:
+                // select that video
+
+            break;
+        }
+    }
+
     this.initialize = function()
     {
         // tell the widget api that we're ready
-        // this should really be refactored to act as a wrapper rather than device specific
-        api.tv.widget.sendReadyEvent();
+        this.initalizeDevice();
 
         // initilize all the app's views
         this.views.loaderView = new LoaderView();

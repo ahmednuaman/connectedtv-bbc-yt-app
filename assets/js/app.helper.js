@@ -1,6 +1,7 @@
 /*
-our app has one helper:
+our app has two helpers:
 - renderTemplate
+- renderTemplateArray
 */
 
 // strict yo

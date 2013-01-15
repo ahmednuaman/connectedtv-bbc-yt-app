@@ -55,7 +55,7 @@ var VideoItemsCollection = function()
 
         // fire the callback
         callback.call(context);
-    }
+    };
 
     // create temp func name
     var funcName = 'videoItemsCollectionParse' + (new Date()).getTime();
@@ -80,11 +80,11 @@ var VideoItemsCollection = function()
     this.get = function(id)
     {
         return models[id];
-    }
+    };
 
     // get all the data as a json hash, just return the models really!
     this.toJSON = function()
     {
         return models;
-    }
+    };
 };

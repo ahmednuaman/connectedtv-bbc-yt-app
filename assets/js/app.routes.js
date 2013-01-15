@@ -100,5 +100,5 @@ function AppRouter()
 
         // finally fire hash change for deep linking
         handleHashChange.call(that);
-    }
-};
+    };
+}

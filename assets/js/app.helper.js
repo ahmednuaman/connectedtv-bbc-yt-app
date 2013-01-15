@@ -22,7 +22,6 @@ var AppHelper = {
     {
         // loop through our array to render the template
         var html = [ ];
-        var item;
 
         for (var id in array)
         {

@@ -221,6 +221,10 @@ function AppView()
 
     this.initialize = function()
     {
+        // tell the widget api that we're ready
+        // this should really be refactored to act as a wrapper rather than device specific
+        api.tv.widget.sendReadyEvent();
+
         // initilize all the app's views
         this.views.loaderView = new LoaderView();
         this.views.playerView = new PlayerView();

@@ -2,4 +2,7 @@
 'use strict';
 
 // fire up our app
-var app = new AppView();
+(function()
+{
+    var app = new AppView();
+})(window);
